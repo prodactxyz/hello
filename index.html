@@ -1,455 +1,251 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Cifrado ⇄ Notas · acordes de guitarra</title>
-<meta name="description" content="Aprende y memoriza los acordes de guitarra: círculo de quintas, diagramas, teoría y examen." />
+<meta name="theme-color" content="#f1e6cf" />
+<title>Diario de un despido · Crear nuevos puntos de vista</title>
+<meta name="description" content="Diario de un despido: nuevas perspectivas en la era de la IA." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
 <style>
-:root{
-  --cream:#F5F0E5; --paper:#FBF8F1; --ink:#28211A; --soft:#6B5F4E; --rule:#D8CDB6; --line:#BCAE92;
-  --green:#2B8C54; --greenbg:#EAF2E9; --red:#B23B2E; --redbg:#F5E7E2;
-  --display:'Playfair Display',Georgia,serif; --body:'EB Garamond',Georgia,serif;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --papel-claro: #faf2dc;
+  --papel: #f1e6cf;
+  --papel-hondo: #e8d9bc;
+  --sombra-papel: #ebd8b1;
+  --tinta: #2b1f12;
+  --tinta-suave: #55442f;
+  --ornamento: #9a8462;
+  --lacre: #8a3b2a;
+  --filete: rgba(100, 70, 30, 0.24);
+  --medida: 34rem;
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{font-family:var(--body);color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased;
-  -webkit-text-size-adjust:100%;}
-.shell{max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;}
-.serif{font-family:var(--display)}
-/* top bar */
-.top{display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 16px 8px;color:var(--soft);
-  font-size:13px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--cream);z-index:5;}
-/* content */
-.content{flex:1;padding:18px 16px calc(96px + env(safe-area-inset-bottom));}
-.h1{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.06;text-align:center;margin:6px 0 4px;}
-.sub{text-align:center;color:var(--soft);font-size:16px;font-style:italic;margin:0 0 18px;}
-.rule{height:1px;background:var(--rule);border:0;margin:14px 0;}
-.card{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:16px;}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--soft);border:1px solid var(--rule);
-  border-radius:99px;padding:4px 10px;background:var(--paper);}
-.section-h{font-family:var(--display);font-weight:600;font-size:20px;margin:18px 0 10px;}
-.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 2px;}
-/* choices / buttons */
-.choice{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--paper);
-  border:1px solid var(--rule);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer;
-  font-family:inherit;font-size:18px;color:var(--ink);}
-.choice:active{transform:translateY(1px)}
-.choice .ic{width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:var(--cream);
-  display:flex;align-items:center;justify-content:center;color:var(--ink)}
-.opt{display:block;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);
-  border-radius:14px;padding:15px 16px;margin-bottom:11px;cursor:pointer;font-family:inherit;font-size:17px;color:var(--ink);}
-.opt.ok{border-color:var(--green);background:var(--greenbg)}
-.opt.no{border-color:var(--red);background:var(--redbg)}
-.opt.dim{opacity:.45}
-.primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--ink);
-  color:var(--cream);border:0;border-radius:14px;padding:15px;font-family:inherit;font-size:18px;font-weight:500;cursor:pointer}
-.primary.green{background:var(--green)}
-.ghost{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid var(--line);
-  border-radius:14px;padding:13px;font-family:inherit;font-size:16px;color:var(--ink);cursor:pointer;width:100%}
-.iconbtn{background:transparent;border:0;cursor:pointer;color:var(--soft);padding:6px;display:flex}
-/* quiz */
-.track{flex:1;height:12px;background:#e7ddc7;border-radius:99px;overflow:hidden}
-.fill{height:100%;background:var(--green);border-radius:99px;transition:width .35s ease}
-.prompt-l{color:var(--soft);text-align:center;font-size:15px;margin-bottom:6px}
-.big{font-family:var(--display);font-weight:700;font-size:clamp(40px,13vw,54px);text-align:center;margin:4px 0 2px}
-.banner{border-radius:16px;padding:14px 15px;margin-top:4px}
-.banner.ok{background:var(--greenbg);border:1px solid var(--green)}
-.banner.no{background:var(--redbg);border:1px solid var(--red)}
-.dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}
-.dot{width:8px;height:8px;border-radius:99px;background:#dcd2bb}
-.dot.on{background:var(--ink);width:20px}
-.tbl{width:100%;border-collapse:collapse;font-size:17px}
-.tbl td{padding:7px 4px;border-bottom:1px solid var(--rule)}
-.tbl td:first-child{font-family:var(--display);font-weight:600;width:40%}
-/* chord grid */
-.chgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:12px}
-.chcard{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:10px 8px 8px;text-align:center}
-.chcard .cif{font-family:var(--display);font-weight:700;font-size:19px;margin-top:2px}
-.chcard .es{font-size:12.5px;color:var(--soft)}
-.svgbox{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:6px;display:inline-block}
-/* bottom nav */
-.nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--rule);z-index:10;
-  padding-bottom:env(safe-area-inset-bottom)}
-.nav-inner{max-width:560px;margin:0 auto;display:flex}
-.nav button{flex:1;background:transparent;border:0;cursor:pointer;padding:9px 4px 8px;display:flex;flex-direction:column;
-  align-items:center;gap:3px;color:var(--soft);font-family:inherit;font-size:12px}
-.nav button.on{color:var(--ink)}
-.nav button.on .navic{background:var(--cream)}
-.navic{width:30px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:9px}
-.foot{margin-top:22px;text-align:center;color:var(--soft);font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
-.pop{animation:pop .18s ease}@keyframes pop{from{transform:scale(.97);opacity:.5}to{transform:scale(1);opacity:1}}
-.shake{animation:shake .3s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-@media (max-width:380px){ .chgrid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))} .h1{font-size:26px} }
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 22% 8%, var(--papel-claro) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 92%, var(--sombra-papel) 0%, transparent 50%),
+    linear-gradient(135deg, var(--papel) 0%, var(--papel-hondo) 100%);
+  background-attachment: fixed;
+  font-family: 'EB Garamond', Georgia, serif;
+  color: var(--tinta);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+}
+
+.envoltorio {
+  width: 100%;
+  max-width: var(--medida);
+  margin: 0 auto;
+  padding-inline: max(22px, env(safe-area-inset-left));
+}
+
+/* ---------- Cabecera ---------- */
+
+.cabecera {
+  padding-top: max(40px, env(safe-area-inset-top));
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.marca {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 7.5vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.tagline {
+  font-style: italic;
+  color: var(--tinta-suave);
+  font-size: clamp(0.95rem, 3.8vw, 1.05rem);
+  margin-top: 6px;
+}
+
+.redes {
+  margin-top: 18px;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.redes a {
+  display: inline-block;
+  padding: 10px 4px;
+  color: var(--ornamento);
+  text-decoration: none;
+  border-bottom: 1px solid var(--filete);
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.redes a:hover, .redes a:focus-visible { color: var(--lacre); border-color: var(--lacre); }
+
+/* ---------- Entrada ---------- */
+
+.entrada { padding-bottom: 12px; }
+
+.fecha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ornamento);
+  font-size: 0.66rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.fecha::before, .fecha::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--filete);
+}
+
+.titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(2.15rem, 10.5vw, 3.1rem);
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 28px;
+}
+
+.cuerpo {
+  font-size: clamp(1.1rem, 4.6vw, 1.22rem);
+  line-height: 1.72;
+  color: var(--tinta);
+}
+
+.cuerpo p + p { margin-top: 1.15em; }
+
+.cuerpo p:first-child::first-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 3.1em;
+  float: left;
+  line-height: 0.78;
+  margin: 0.07em 0.09em 0 0;
+  color: var(--lacre);
+}
+
+.destacado {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.35rem, 5.6vw, 1.6rem);
+  line-height: 1.4;
+  color: var(--tinta-suave);
+  text-align: center;
+  padding: 26px 6px;
+  margin: 30px 0;
+  border-top: 1px solid var(--filete);
+  border-bottom: 1px solid var(--filete);
+}
+
+.firma {
+  margin-top: 32px;
+  text-align: right;
+  font-family: 'Caveat', cursive;
+  font-size: 1.7rem;
+  color: var(--ornamento);
+}
+
+/* ---------- Cierre ---------- */
+
+.cierre {
+  margin-top: 34px;
+  padding: 24px 0;
+  border-top: 1px solid var(--filete);
+  text-align: center;
+  font-style: italic;
+  color: var(--tinta-suave);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.cierre a {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 8px 2px;
+  font-style: normal;
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lacre);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(138, 59, 42, 0.45);
+}
+
+.pie {
+  padding-bottom: max(40px, env(safe-area-inset-bottom));
+  text-align: center;
+  color: var(--ornamento);
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+}
+
+a:focus-visible { outline: 2px solid var(--lacre); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+
+<!-- Mixpanel -->
+<script type="text/javascript">
+  (function(e,c){if(!c.__SV){var l,h;window.mixpanel=c;c._i=[];c.init=function(q,r,f){function t(d,a){var g=a.split(".");2==g.length&&(d=d[g[0]],a=g[1]);d[a]=function(){d.push([a].concat(Array.prototype.slice.call(arguments,0)))}}var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";b.people=b.people||[];b.toString=function(d){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);d||(a+=" (stub)");return a};b.people.toString=function(){return b.toString(1)+".people (stub)"};l="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders start_session_recording stop_session_recording people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+  for(h=0;h<l.length;h++)t(b,l[h]);var n="set set_once union unset remove delete".split(" ");b.get_group=function(){function d(p){a[p]=function(){b.push([g,[p].concat(Array.prototype.slice.call(arguments,0))])}}for(var a={},g=["get_group"].concat(Array.prototype.slice.call(arguments,0)),m=0;m<n.length;m++)d(n[m]);return a};c._i.push([q,r,f])};c.__SV=1.2;var k=e.createElement("script");k.type="text/javascript";k.async=!0;k.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===
+  e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=e.getElementsByTagName("script")[0];e.parentNode.insertBefore(k,e)}})(document,window.mixpanel||[])
+
+  mixpanel.init('4b372793f5dfbed79b94b7d029e430bf', {
+    autocapture: true,
+    record_sessions_percent: 100,
+    api_host: 'https://api-eu.mixpanel.com',
+  })
+</script>
 </head>
 <body>
-<div id="root"></div>
 
-<script>
-(() => {
-  const { useState } = React;
-  const NOTA = { C: "Do", D: "Re", E: "Mi", F: "Fa", G: "Sol", A: "La", B: "Si" };
-  const CHORDS = [
-    { cif: "A", es: "La mayor", tipo: "mayor", frets: [-1, 0, 2, 2, 2, 0], fingers: [0, 0, 1, 2, 3, 0], barre: null },
-    { cif: "Am", es: "La menor", tipo: "menor", frets: [-1, 0, 2, 2, 1, 0], fingers: [0, 0, 2, 3, 1, 0], barre: null },
-    { cif: "Bm", es: "Si menor", tipo: "menor", frets: [-1, 2, 4, 4, 3, 2], fingers: [0, 1, 3, 4, 2, 1], barre: { fret: 2, from: 1, to: 5 } },
-    { cif: "C", es: "Do mayor", tipo: "mayor", frets: [-1, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0], barre: null },
-    { cif: "D", es: "Re mayor", tipo: "mayor", frets: [-1, -1, 0, 2, 3, 2], fingers: [0, 0, 0, 1, 3, 2], barre: null },
-    { cif: "D+", es: "Re aumentado", tipo: "aumentado", frets: [-1, -1, 0, 3, 3, 2], fingers: [0, 0, 0, 2, 3, 1], barre: null },
-    { cif: "Dm", es: "Re menor", tipo: "menor", frets: [-1, -1, 0, 2, 3, 1], fingers: [0, 0, 0, 2, 3, 1], barre: null },
-    { cif: "Dsus4", es: "Re suspendida (4\xAA)", tipo: "suspendida", frets: [-1, -1, 0, 2, 3, 3], fingers: [0, 0, 0, 1, 3, 4], barre: null },
-    { cif: "E7", es: "Mi s\xE9ptima", tipo: "s\xE9ptima", frets: [0, 2, 0, 1, 0, 0], fingers: [0, 2, 0, 1, 0, 0], barre: null },
-    { cif: "Em", es: "Mi menor", tipo: "menor", frets: [0, 2, 2, 0, 0, 0], fingers: [0, 2, 3, 0, 0, 0], barre: null },
-    { cif: "F", es: "Fa mayor", tipo: "mayor", frets: [1, 3, 3, 2, 1, 1], fingers: [1, 3, 4, 2, 1, 1], barre: { fret: 1, from: 0, to: 5 } },
-    { cif: "F#m", es: "Fa sostenido menor", tipo: "menor", frets: [2, 4, 4, 2, 2, 2], fingers: [1, 3, 4, 1, 1, 1], barre: { fret: 2, from: 0, to: 5 } },
-    { cif: "G", es: "Sol mayor", tipo: "mayor", frets: [3, 2, 0, 0, 0, 3], fingers: [2, 1, 0, 0, 0, 3], barre: null },
-    { cif: "G7", es: "Sol s\xE9ptima", tipo: "s\xE9ptima", frets: [3, 2, 0, 0, 0, 1], fingers: [3, 2, 0, 0, 0, 1], barre: null },
-    { cif: "Gm", es: "Sol menor", tipo: "menor", frets: [3, 5, 5, 3, 3, 3], fingers: [1, 3, 4, 1, 1, 1], barre: { fret: 3, from: 0, to: 5 } },
-    { cif: "E", es: "Mi mayor", tipo: "mayor", frets: [0, 2, 2, 1, 0, 0], fingers: [0, 2, 3, 1, 0, 0], barre: null },
-    { cif: "B7", es: "Si s\xE9ptima", tipo: "s\xE9ptima", frets: [-1, 2, 1, 2, 0, 2], fingers: [0, 2, 1, 3, 0, 4], barre: null },
-    { cif: "A7", es: "La s\xE9ptima", tipo: "s\xE9ptima", frets: [-1, 0, 2, 0, 2, 0], fingers: [0, 0, 2, 0, 3, 0], barre: null },
-    { cif: "D7", es: "Re s\xE9ptima", tipo: "s\xE9ptima", frets: [-1, -1, 0, 2, 1, 2], fingers: [0, 0, 0, 2, 1, 3], barre: null },
-    { cif: "C7", es: "Do s\xE9ptima", tipo: "s\xE9ptima", frets: [-1, 3, 2, 3, 1, 0], fingers: [0, 3, 2, 4, 1, 0], barre: null },
-    { cif: "Em7", es: "Mi menor s\xE9ptima", tipo: "menor7", frets: [0, 2, 0, 0, 0, 0], fingers: [0, 2, 0, 0, 0, 0], barre: null },
-    { cif: "Am7", es: "La menor s\xE9ptima", tipo: "menor7", frets: [-1, 0, 2, 0, 1, 0], fingers: [0, 0, 2, 0, 1, 0], barre: null },
-    { cif: "Dm7", es: "Re menor s\xE9ptima", tipo: "menor7", frets: [-1, -1, 0, 2, 1, 1], fingers: [0, 0, 0, 2, 1, 1], barre: { fret: 1, from: 4, to: 5 } },
-    { cif: "Cadd9", es: "Do con novena (add9)", tipo: "a\xF1adido", frets: [-1, 3, 2, 0, 3, 3], fingers: [0, 2, 1, 0, 3, 4], barre: null },
-    { cif: "Dsus2", es: "Re suspendida (2\xAA)", tipo: "suspendida", frets: [-1, -1, 0, 2, 3, 0], fingers: [0, 0, 0, 1, 2, 0], barre: null },
-    { cif: "Asus2", es: "La suspendida (2\xAA)", tipo: "suspendida", frets: [-1, 0, 2, 2, 0, 0], fingers: [0, 0, 1, 2, 0, 0], barre: null },
-    { cif: "Asus4", es: "La suspendida (4\xAA)", tipo: "suspendida", frets: [-1, 0, 2, 2, 3, 0], fingers: [0, 0, 1, 2, 3, 0], barre: null },
-    { cif: "Esus4", es: "Mi suspendida (4\xAA)", tipo: "suspendida", frets: [0, 2, 2, 2, 0, 0], fingers: [0, 1, 2, 3, 0, 0], barre: null },
-    { cif: "B", es: "Si mayor", tipo: "mayor", frets: [-1, 2, 4, 4, 4, 2], fingers: [0, 1, 2, 3, 4, 1], barre: { fret: 2, from: 1, to: 5 } },
-    { cif: "Bb", es: "Si bemol mayor", tipo: "mayor", frets: [-1, 1, 3, 3, 3, 1], fingers: [0, 1, 2, 3, 4, 1], barre: { fret: 1, from: 1, to: 5 } }
-  ];
-  const byCif = (id) => CHORDS.find((c) => c.cif === id);
-  const LIB = new Set(CHORDS.map((c) => c.cif));
-  const SYM = { m: "menor", "7": "s\xE9ptima", "+": "aumentado", sus4: "suspendida (4\xAA)", sus2: "suspendida (2\xAA)", add9: "la novena (add9)", "#": "sostenido", b: "bemol" };
-  const FAMILIES = [
-    { name: "Familia de Do mayor", song: "\xABLa Bamba\xBB \u2014 Ritchie Valens", ids: ["C", "F", "G7"] },
-    { name: "Familia de Sol mayor", song: "\xABZombie\xBB \u2014 The Cranberries", ids: ["G", "D", "Em"] },
-    { name: "Familia de La mayor", song: "\xABTake On Me\xBB \u2014 a-ha", ids: ["A", "F#m", "Bm"] },
-    { name: "Familia de La menor", song: "\xABHistoria de un amor\xBB", ids: ["Am", "Dm", "E7"] },
-    { name: "Acordes de color", song: "\xABB\xE9same mucho\xBB (por el Sol menor)", ids: ["Gm", "Dsus4", "D+"] }
-  ];
-  const GROUPS = [
-    ["Mayores", CHORDS.filter((c) => c.tipo === "mayor")],
-    ["Menores", CHORDS.filter((c) => c.tipo === "menor")],
-    ["S\xE9ptimas", CHORDS.filter((c) => c.tipo === "s\xE9ptima")],
-    ["Menores con s\xE9ptima", CHORDS.filter((c) => c.tipo === "menor7")],
-    ["Suspendidas", CHORDS.filter((c) => c.tipo === "suspendida")],
-    ["A\xF1adidos y aumentados", CHORDS.filter((c) => c.tipo === "a\xF1adido" || c.tipo === "aumentado")]
-  ];
-  const SETS = [
-    { id: "todos", label: "Todos los acordes", sub: "los 30", ids: CHORDS.map((c) => c.cif) },
-    { id: "basicos", label: "Los b\xE1sicos", sub: "abiertos y f\xE1ciles", ids: ["A", "Am", "C", "D", "Dm", "E", "Em", "E7", "G"] },
-    { id: "mayores", label: "Solo mayores", sub: "A B C D E F G Bb", ids: CHORDS.filter((c) => c.tipo === "mayor").map((c) => c.cif) },
-    { id: "menores", label: "Solo menores", sub: "los que llevan m", ids: CHORDS.filter((c) => c.tipo === "menor").map((c) => c.cif) },
-    { id: "sept", label: "S\xE9ptimas", sub: "7 y m7", ids: ["A7", "B7", "C7", "D7", "E7", "G7", "Em7", "Am7", "Dm7"] },
-    { id: "color", label: "Sus, add y aumentados", sub: "sus2 \xB7 sus4 \xB7 add9 \xB7 +", ids: ["Dsus2", "Dsus4", "Asus2", "Asus4", "Esus4", "Cadd9", "D+"] },
-    { id: "cejilla", label: "Las de cejilla", sub: "barr\xE9", ids: ["F", "Bm", "F#m", "Gm", "B", "Bb"] }
-  ];
-  function parseCif(cif) {
-    const letter = cif[0];
-    let i = 1, acc = "";
-    if (cif[1] === "#" || cif[1] === "b") {
-      acc = cif[1];
-      i = 2;
-    }
-    return { letter, acc, suf: cif.slice(i) };
-  }
-  const SUF_DESC = {
-    "": "sin s\xEDmbolo \u2192 mayor",
-    m: "m \u2192 menor",
-    "7": "7 \u2192 s\xE9ptima",
-    m7: "m7 \u2192 menor con s\xE9ptima",
-    "+": "+ \u2192 aumentado",
-    sus4: "sus \u2192 suspendida (4\xAA)",
-    sus: "sus \u2192 suspendida",
-    sus2: "sus2 \u2192 suspendida (2\xAA)",
-    add9: "add9 \u2192 con la novena"
-  };
-  function explain(chord) {
-    const { letter, acc, suf } = parseCif(chord.cif);
-    const bits = [letter + " = " + NOTA[letter]];
-    if (acc === "#") bits.push("# = sostenido");
-    else if (acc === "b") bits.push("b = bemol");
-    bits.push(SUF_DESC[suf] !== void 0 ? SUF_DESC[suf] : suf);
-    return bits.join("  \xB7  ");
-  }
-  function symbolsOf(cif) {
-    const { acc, suf } = parseCif(cif);
-    const arr = [];
-    if (acc) arr.push(acc);
-    if (suf === "m") arr.push("m");
-    else if (suf === "7") arr.push("7");
-    else if (suf === "m7") arr.push("7");
-    else if (suf === "+") arr.push("+");
-    else if (suf === "sus2") arr.push("sus2");
-    else if (suf.startsWith("sus")) arr.push("sus4");
-    else if (suf === "add9") arr.push("add9");
-    return arr;
-  }
-  const shuffle = (a) => {
-    const r = [...a];
-    for (let i = r.length - 1; i > 0; i--) {
-      const j = Math.random() * (i + 1) | 0;
-      [r[i], r[j]] = [r[j], r[i]];
-    }
-    return r;
-  };
-  function distractors(chord, key) {
-    const others = CHORDS.filter((c) => c.cif !== chord.cif);
-    const sameLetter = others.filter((c) => c.cif[0] === chord.cif[0]);
-    const sameType = others.filter((c) => c.tipo === chord.tipo);
-    const pref = shuffle([...sameLetter, ...sameType, ...shuffle(others)]);
-    const seen = /* @__PURE__ */ new Set(), out = [];
-    for (const c of pref) {
-      const v = c[key];
-      if (v !== chord[key] && !seen.has(v)) {
-        seen.add(v);
-        out.push(v);
-        if (out.length === 3) break;
-      }
-    }
-    return out;
-  }
-  function makeQuestion(chord) {
-    const syms = symbolsOf(chord.cif);
-    const roll = Math.random();
-    let mode = roll < 0.5 ? "c2e" : "e2c";
-    if (syms.length && roll > 0.72) mode = "sym";
-    if (mode === "sym") {
-      const sym = syms[Math.random() * syms.length | 0];
-      const correct = SYM[sym];
-      const wrong = shuffle(Object.values(SYM).filter((v) => v !== correct)).slice(0, 3);
-      return { chord, mode, label: "En \xAB" + chord.cif + "\xBB, \xBFqu\xE9 significa \xAB" + sym + "\xBB?", big: null, correct, options: shuffle([correct, ...wrong]) };
-    }
-    if (mode === "c2e") return { chord, mode, label: "\xBFQu\xE9 acorde es este?", big: chord.cif, correct: chord.es, options: shuffle([chord.es, ...distractors(chord, "es")]) };
-    return { chord, mode, label: "\xBFC\xF3mo se escribe en cifrado?", big: chord.es, correct: chord.cif, options: shuffle([chord.cif, ...distractors(chord, "cif")]) };
-  }
-  function I({ n, s = 20, c }) {
-    const st = { width: s, height: s, stroke: c || "currentColor", fill: "none", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
-    const m = {
-      check: /* @__PURE__ */ React.createElement("polyline", { points: "20 6 9 17 4 12" }),
-      x: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("line", { x1: "18", y1: "6", x2: "6", y2: "18" }), /* @__PURE__ */ React.createElement("line", { x1: "6", y1: "6", x2: "18", y2: "18" })),
-      right: /* @__PURE__ */ React.createElement("polyline", { points: "9 18 15 12 9 6" }),
-      left: /* @__PURE__ */ React.createElement("polyline", { points: "15 18 9 12 15 6" }),
-      aleft: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("line", { x1: "19", y1: "12", x2: "5", y2: "12" }), /* @__PURE__ */ React.createElement("polyline", { points: "12 19 5 12 12 5" })),
-      book: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("path", { d: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" }), /* @__PURE__ */ React.createElement("path", { d: "M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" })),
-      cap: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("path", { d: "M22 10 12 5 2 10l10 5 10-5z" }), /* @__PURE__ */ React.createElement("path", { d: "M6 12v5c0 1 3 3 6 3s6-2 6-3v-5" })),
-      note: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "18", r: "3" }), /* @__PURE__ */ React.createElement("circle", { cx: "18", cy: "16", r: "3" }), /* @__PURE__ */ React.createElement("path", { d: "M9 18V4l12-2v14" })),
-      award: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "8", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "M8.5 13 7 21l5-3 5 3-1.5-8" })),
-      redo: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("polyline", { points: "1 4 1 10 7 10" }), /* @__PURE__ */ React.createElement("path", { d: "M3.5 15a9 9 0 1 0 2-9.7L1 10" })),
-      spark: /* @__PURE__ */ React.createElement("path", { d: "M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" }),
-      grid: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("rect", { x: "3", y: "3", width: "7", height: "7" }), /* @__PURE__ */ React.createElement("rect", { x: "14", y: "3", width: "7", height: "7" }), /* @__PURE__ */ React.createElement("rect", { x: "3", y: "14", width: "7", height: "7" }), /* @__PURE__ */ React.createElement("rect", { x: "14", y: "14", width: "7", height: "7" })),
-      wheel: /* @__PURE__ */ React.createElement("g", null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "3.4" }), /* @__PURE__ */ React.createElement("line", { x1: "12", y1: "3", x2: "12", y2: "8.6" }), /* @__PURE__ */ React.createElement("line", { x1: "12", y1: "15.4", x2: "12", y2: "21" }), /* @__PURE__ */ React.createElement("line", { x1: "3", y1: "12", x2: "8.6", y2: "12" }), /* @__PURE__ */ React.createElement("line", { x1: "15.4", y1: "12", x2: "21", y2: "12" }))
-    };
-    return /* @__PURE__ */ React.createElement("svg", { style: st, viewBox: "0 0 24 24" }, m[n]);
-  }
-  function IG({ s = 15, c = "#6B5F4E" }) {
-    return /* @__PURE__ */ React.createElement("svg", { width: s, height: s, viewBox: "0 0 24 24", fill: "none", stroke: c, strokeWidth: "2" }, /* @__PURE__ */ React.createElement("rect", { x: "2.5", y: "2.5", width: "19", height: "19", rx: "5" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "4.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "17.5", cy: "6.5", r: "1.2", fill: c, stroke: "none" }));
-  }
-  const Foot = () => /* @__PURE__ */ React.createElement("div", { className: "foot" }, /* @__PURE__ */ React.createElement(IG, null), " ", /* @__PURE__ */ React.createElement("span", null, "@despedidoporlaia"));
-  const FCOL = { 1: "#D43333", 2: "#8C47AD", 3: "#2B8C54", 4: "#296BB8" };
-  function ChordDiagram({ chord, scale = 1 }) {
-    const { frets, fingers, barre } = chord;
-    const NF = 4;
-    const played = frets.filter((f) => f > 0);
-    const maxF = played.length ? Math.max(...played) : 0;
-    const base = maxF > NF ? Math.min(...played) : 1;
-    const SW = 15 * scale, FH = 18 * scale, padX = 16 * scale, padTop = 20 * scale, dotR = 7 * scale;
-    const gridW = 5 * SW, gridH = NF * FH, W = gridW + 2 * padX, H = gridH + padTop + 8 * scale;
-    const xOf = (i) => padX + i * SW, yFret = (k) => padTop + k * FH;
-    const dots = [];
-    frets.forEach((f, i) => {
-      if (f > 0) {
-        const rel = f - base + 1;
-        if (rel >= 1 && rel <= NF) dots.push({ x: xOf(i), y: yFret(rel - 0.5), d: fingers[i] });
-      }
-    });
-    return /* @__PURE__ */ React.createElement("svg", { width: W, height: H, viewBox: "0 0 " + W + " " + H, style: { display: "block" } }, frets.map((f, i) => f === -1 ? /* @__PURE__ */ React.createElement("text", { key: "x" + i, x: xOf(i), y: padTop - 6 * scale, textAnchor: "middle", fontSize: 9 * scale, fill: "#6B5F4E" }, "\xD7") : f === 0 ? /* @__PURE__ */ React.createElement("circle", { key: "o" + i, cx: xOf(i), cy: padTop - 9 * scale, r: 3 * scale, fill: "none", stroke: "#6B5F4E", strokeWidth: 1.1 * scale }) : null), base === 1 ? /* @__PURE__ */ React.createElement("rect", { x: padX, y: padTop - 2 * scale, width: gridW, height: 2.6 * scale, fill: "#28211A" }) : /* @__PURE__ */ React.createElement("text", { x: padX - 5 * scale, y: padTop + FH * 0.62, textAnchor: "end", fontSize: 8 * scale, fill: "#6B5F4E" }, base), Array.from({ length: NF + 1 }, (_, k) => /* @__PURE__ */ React.createElement("line", { key: "f" + k, x1: padX, y1: yFret(k), x2: padX + gridW, y2: yFret(k), stroke: "#7d715c", strokeWidth: 0.8 * scale })), Array.from({ length: 6 }, (_, i) => /* @__PURE__ */ React.createElement("line", { key: "s" + i, x1: xOf(i), y1: padTop, x2: xOf(i), y2: padTop + gridH, stroke: "#7d715c", strokeWidth: 0.8 * scale })), barre && (() => {
-      const rel = barre.fret - base + 1;
-      const y = yFret(rel - 0.5);
-      return /* @__PURE__ */ React.createElement("rect", { x: xOf(barre.from) - dotR, y: y - dotR, width: (barre.to - barre.from) * SW + 2 * dotR, height: 2 * dotR, rx: dotR, fill: FCOL[1] });
-    })(), dots.map((p, k) => /* @__PURE__ */ React.createElement("g", { key: "d" + k }, /* @__PURE__ */ React.createElement("circle", { cx: p.x, cy: p.y, r: dotR, fill: FCOL[p.d] || "#28211A" }), /* @__PURE__ */ React.createElement("text", { x: p.x, y: p.y + 3.3 * scale, textAnchor: "middle", fontSize: 8.5 * scale, fontWeight: "700", fill: "#fff" }, p.d || ""))));
-  }
-  const ChordCard = ({ chord }) => /* @__PURE__ */ React.createElement("div", { className: "chcard" }, /* @__PURE__ */ React.createElement("span", { className: "svgbox" }, /* @__PURE__ */ React.createElement(ChordDiagram, { chord, scale: 0.92 })), /* @__PURE__ */ React.createElement("div", { className: "cif" }, chord.cif), /* @__PURE__ */ React.createElement("div", { className: "es" }, chord.es));
-  function Legend() {
-    return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 700, fontSize: 18, marginBottom: 8 } }, "C\xF3mo leer un diagrama"), /* @__PURE__ */ React.createElement("p", { style: { margin: "0 0 8px", fontSize: 15.5, lineHeight: 1.45 } }, "Las cuerdas van en vertical: la izquierda es la 6\xAA (Mi grave) y la derecha la 1\xAA (Mi agudo). Arriba, ", /* @__PURE__ */ React.createElement("b", null, "\xD7"), " = no suena y ", /* @__PURE__ */ React.createElement("b", null, "\u25CB"), " = al aire. La barra de color es una cejilla (el \xEDndice pisa varias cuerdas)."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px 16px", marginBottom: 8 } }, [[1, "\xCDndice"], [2, "Coraz\xF3n"], [3, "Anular"], [4, "Me\xF1ique"]].map(([d, n]) => /* @__PURE__ */ React.createElement("span", { key: d, style: { display: "inline-flex", alignItems: "center", gap: 7, fontSize: 15 } }, /* @__PURE__ */ React.createElement("span", { style: {
-      width: 18,
-      height: 18,
-      borderRadius: 99,
-      background: FCOL[d],
-      color: "#fff",
-      fontSize: 11,
-      fontWeight: 700,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    } }, d), n))));
-  }
-  const MAJ = ["C", "G", "D", "A", "E", "B", "F#", "Db", "Ab", "Eb", "Bb", "F"];
-  const MIN = ["Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm", "Bbm", "Fm", "Cm", "Gm", "Dm"];
-  function Wheel() {
-    const [sel, setSel] = useState("G");
-    const cx = 190, cy = 182, Rmaj = 150, Rmin = 108, gMaj = 168, gMid = 128, gMin = 86;
-    const pos = (R, i) => {
-      const t = i * 30 * Math.PI / 180;
-      return [cx + R * Math.sin(t), cy - R * Math.cos(t)];
-    };
-    const bubble = (list, R, r, i) => {
-      const cif = list[i];
-      const on = LIB.has(cif);
-      const [x, y] = pos(R, i);
-      const isSel = on && sel === cif;
-      return /* @__PURE__ */ React.createElement("g", { key: R + "-" + i, style: { cursor: on ? "pointer" : "default" }, onClick: () => {
-        if (on) setSel(cif);
-      } }, /* @__PURE__ */ React.createElement("circle", { cx: x, cy: y, r, fill: isSel ? "#2B8C54" : on ? "#28211A" : "none", stroke: on ? "none" : "#c7bca1", strokeWidth: "1" }), /* @__PURE__ */ React.createElement(
-        "text",
-        {
-          x,
-          y,
-          textAnchor: "middle",
-          dominantBaseline: "central",
-          fontFamily: "'Playfair Display',serif",
-          fontSize: r > 17 ? 15 : 12.5,
-          fontWeight: on ? "600" : "400",
-          fill: on ? "#F5F0E5" : "#9a8f79"
-        },
-        cif
-      ));
-    };
-    const selCh = byCif(sel);
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow", style: { textAlign: "center" } }, "Explora"), /* @__PURE__ */ React.createElement("h1", { className: "h1" }, "C\xEDrculo de Quintas"), /* @__PURE__ */ React.createElement("p", { className: "sub" }, "Toca un acorde para ver c\xF3mo se coloca"), /* @__PURE__ */ React.createElement("div", { style: { background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 18, padding: "6px 4px" } }, /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 380 372", style: { width: "100%", height: "auto", display: "block" } }, /* @__PURE__ */ React.createElement("circle", { cx, cy, r: gMaj, fill: "none", stroke: "#cfc4a9", strokeWidth: "1" }), /* @__PURE__ */ React.createElement("circle", { cx, cy, r: gMid, fill: "none", stroke: "#cfc4a9", strokeWidth: "1" }), /* @__PURE__ */ React.createElement("circle", { cx, cy, r: gMin, fill: "none", stroke: "#cfc4a9", strokeWidth: "1" }), Array.from({ length: 12 }, (_, i) => {
-      const [x1, y1] = pos(gMin, i + 0.5), [x2, y2] = pos(gMaj, i + 0.5);
-      return /* @__PURE__ */ React.createElement("line", { key: "r" + i, x1, y1, x2, y2, stroke: "#e0d6bd", strokeWidth: "0.8" });
-    }), /* @__PURE__ */ React.createElement("text", { x: cx, y: cy - 6, textAnchor: "middle", fontFamily: "'EB Garamond',serif", fontStyle: "italic", fontSize: "12", fill: "#8b7f68" }, "mayores fuera"), /* @__PURE__ */ React.createElement("text", { x: cx, y: cy + 10, textAnchor: "middle", fontFamily: "'EB Garamond',serif", fontStyle: "italic", fontSize: "12", fill: "#8b7f68" }, "menores dentro"), Array.from({ length: 12 }, (_, i) => bubble(MAJ, Rmaj, 20, i)), Array.from({ length: 12 }, (_, i) => bubble(MIN, Rmin, 17, i)))), selCh && /* @__PURE__ */ React.createElement("div", { className: "card pop", style: { marginTop: 14, display: "flex", alignItems: "center", gap: 16 }, key: sel }, /* @__PURE__ */ React.createElement("span", { className: "svgbox" }, /* @__PURE__ */ React.createElement(ChordDiagram, { chord: selCh, scale: 1.15 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 700, fontSize: 24, lineHeight: 1 } }, selCh.cif), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 16, color: "var(--ink)" } }, selCh.es), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13.5, color: "var(--soft)", marginTop: 6 } }, explain(selCh)))), /* @__PURE__ */ React.createElement("div", { className: "card", style: { marginTop: 14 } }, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 700, fontSize: 18, marginBottom: 6 } }, "C\xF3mo se usa"), /* @__PURE__ */ React.createElement("p", { style: { margin: 0, fontSize: 15.5, lineHeight: 1.5, color: "var(--ink)" } }, "Los acordes juntos en el c\xEDrculo pegan entre s\xED. Coge uno del anillo de fuera: el de su derecha y el de su izquierda son sus vecinos, y con esos tres tienes la base de miles de canciones. A\xF1ade el menor de justo debajo y ya suena a canci\xF3n. Los apagados son acordes que a\xFAn no est\xE1n en la app.")), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  function Acordes() {
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow", style: { textAlign: "center" } }, "Referencia"), /* @__PURE__ */ React.createElement("h1", { className: "h1" }, "Los acordes"), /* @__PURE__ */ React.createElement("p", { className: "sub" }, "Diagramas con los dedos por color"), /* @__PURE__ */ React.createElement(Legend, null), /* @__PURE__ */ React.createElement("div", { className: "section-h" }, "Familias para empezar"), /* @__PURE__ */ React.createElement("p", { style: { marginTop: -4, color: "var(--soft)", fontSize: 15 } }, "Tres acordes que pegan entre s\xED, con una canci\xF3n de ejemplo para cada grupo."), FAMILIES.map((f) => /* @__PURE__ */ React.createElement("div", { key: f.name, style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 600, fontSize: 17 } }, f.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, color: "var(--soft)", margin: "1px 0 8px" } }, "Canci\xF3n: ", f.song), /* @__PURE__ */ React.createElement("div", { className: "chgrid", style: { gridTemplateColumns: "repeat(3,1fr)" } }, f.ids.map((id) => /* @__PURE__ */ React.createElement(ChordCard, { key: id, chord: byCif(id) }))))), /* @__PURE__ */ React.createElement("hr", { className: "rule" }), /* @__PURE__ */ React.createElement("div", { className: "section-h" }, "Todos los acordes"), GROUPS.map(([title, list]) => list.length > 0 && /* @__PURE__ */ React.createElement("div", { key: title, style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--display)", fontWeight: 600, fontSize: 16, color: "var(--soft)", margin: "6px 0 8px" } }, title), /* @__PURE__ */ React.createElement("div", { className: "chgrid" }, list.map((c) => /* @__PURE__ */ React.createElement(ChordCard, { key: c.cif, chord: c }))))), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  const Mini = ({ chord, caption }) => /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("span", { className: "svgbox" }, /* @__PURE__ */ React.createElement(ChordDiagram, { chord, scale: 0.95 })), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--soft)", marginTop: 5 } }, caption));
-  function Lessons({ goExam }) {
-    const [i, setI] = useState(0);
-    const pages = [
-      { title: "El truco de las 7 letras", body: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", { style: { marginTop: 0 } }, "En el cifrado anglosaj\xF3n cada acorde empieza por una ", /* @__PURE__ */ React.createElement("b", null, "letra"), ", y cada letra es una nota. Solo son siete:"), /* @__PURE__ */ React.createElement("table", { className: "tbl" }, /* @__PURE__ */ React.createElement("tbody", null, [["C", "Do"], ["D", "Re"], ["E", "Mi"], ["F", "Fa"], ["G", "Sol"], ["A", "La"], ["B", "Si"]].map(([l, n]) => /* @__PURE__ */ React.createElement("tr", { key: l }, /* @__PURE__ */ React.createElement("td", null, l), /* @__PURE__ */ React.createElement("td", null, n))))), /* @__PURE__ */ React.createElement("p", { style: { marginBottom: 0, color: "var(--soft)" } }, "Ojo al salto: ", /* @__PURE__ */ React.createElement("b", null, "A es La"), ", no Do. El abecedario musical empieza en Do (C), pero las letras van corridas.")) },
-      { title: "\xBFMay\xFAscula o m?", body: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", { style: { marginTop: 0 } }, "La misma letra cambia de car\xE1cter seg\xFAn lo que lleve al lado:"), /* @__PURE__ */ React.createElement("ul", { style: { paddingLeft: 18, margin: "10px 0" } }, /* @__PURE__ */ React.createElement("li", { style: { marginBottom: 6 } }, /* @__PURE__ */ React.createElement("b", null, "Letra sola"), " = acorde ", /* @__PURE__ */ React.createElement("b", null, "mayor"), ". \xA0G = Sol mayor."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("b", null, "Con \xABm\xBB min\xFAscula"), " = acorde ", /* @__PURE__ */ React.createElement("b", null, "menor"), ". \xA0Gm = Sol menor.")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 18, justifyContent: "center", marginTop: 8 } }, /* @__PURE__ */ React.createElement(Mini, { chord: byCif("G"), caption: "G \xB7 Sol mayor" }), /* @__PURE__ */ React.createElement(Mini, { chord: byCif("Gm"), caption: "Gm \xB7 Sol menor" }))) },
-      { title: "Los s\xEDmbolos que se a\xF1aden", body: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", { style: { marginTop: 0 } }, "Despu\xE9s de la letra pueden aparecer estos a\xF1adidos:"), /* @__PURE__ */ React.createElement("table", { className: "tbl" }, /* @__PURE__ */ React.createElement("tbody", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "7"), /* @__PURE__ */ React.createElement("td", null, "s\xE9ptima \xB7 G7 = Sol s\xE9ptima")), /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "m7"), /* @__PURE__ */ React.createElement("td", null, "menor con s\xE9ptima \xB7 Am7")), /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "+"), /* @__PURE__ */ React.createElement("td", null, "aumentado \xB7 D+ = Re aumentado")), /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "sus2 / sus4"), /* @__PURE__ */ React.createElement("td", null, "suspendida \xB7 Dsus2, Dsus4")), /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "add9"), /* @__PURE__ */ React.createElement("td", null, "con la novena \xB7 Cadd9")), /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, "# / b"), /* @__PURE__ */ React.createElement("td", null, "sostenido / bemol \xB7 F#, Bb")))), /* @__PURE__ */ React.createElement("p", { style: { marginBottom: 0, color: "var(--soft)" } }, "Se combinan: ", /* @__PURE__ */ React.createElement("b", null, "F#m"), " = Fa + sostenido + menor = ", /* @__PURE__ */ React.createElement("b", null, "Fa sostenido menor"), ".")) },
-      { title: "C\xF3mo leer el diagrama", body: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", { style: { marginTop: 0 } }, "Las cuerdas van en vertical: izquierda la 6\xAA (Mi grave), derecha la 1\xAA (Mi agudo). Arriba, ", /* @__PURE__ */ React.createElement("b", null, "\xD7"), " = no suena y ", /* @__PURE__ */ React.createElement("b", null, "\u25CB"), " = al aire."), /* @__PURE__ */ React.createElement("p", { style: { margin: "0 0 8px" } }, "El color y el n\xFAmero del punto dicen el dedo:"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px 16px", marginBottom: 10 } }, [[1, "\xCDndice"], [2, "Coraz\xF3n"], [3, "Anular"], [4, "Me\xF1ique"]].map(([d, n]) => /* @__PURE__ */ React.createElement("span", { key: d, style: { display: "inline-flex", alignItems: "center", gap: 7 } }, /* @__PURE__ */ React.createElement("span", { style: { width: 18, height: 18, borderRadius: 99, background: FCOL[d], color: "#fff", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" } }, d), n))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: 6 } }, /* @__PURE__ */ React.createElement(Mini, { chord: byCif("C"), caption: "C \xB7 Do mayor" }))) }
-    ];
-    const last = i === pages.length - 1;
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow", style: { textAlign: "center" } }, "Aprende"), /* @__PURE__ */ React.createElement("h1", { className: "h1" }, "La teor\xEDa, en cuatro pasos"), /* @__PURE__ */ React.createElement("div", { className: "dots", style: { marginTop: 10 } }, pages.map((_, k) => /* @__PURE__ */ React.createElement("span", { key: k, className: "dot" + (k === i ? " on" : "") }))), /* @__PURE__ */ React.createElement("div", { className: "card pop", key: i }, /* @__PURE__ */ React.createElement("h2", { className: "serif", style: { margin: "0 0 12px", fontSize: 23, fontWeight: 700 } }, pages[i].title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 17, lineHeight: 1.5 } }, pages[i].body)), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10, marginTop: 16 } }, i > 0 && /* @__PURE__ */ React.createElement("button", { className: "ghost", style: { flex: "0 0 46%" }, onClick: () => setI(i - 1) }, /* @__PURE__ */ React.createElement(I, { n: "left", s: 18 }), " Atr\xE1s"), last ? /* @__PURE__ */ React.createElement("button", { className: "primary green", onClick: goExam }, /* @__PURE__ */ React.createElement(I, { n: "cap", s: 20 }), " Ir al examen") : /* @__PURE__ */ React.createElement("button", { className: "primary", onClick: () => setI(i + 1) }, "Siguiente ", /* @__PURE__ */ React.createElement(I, { n: "right", s: 18 }))), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  function Setup({ onStart }) {
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow", style: { textAlign: "center" } }, "Examen"), /* @__PURE__ */ React.createElement("h1", { className: "h1" }, "\xBFQu\xE9 practicas hoy?"), /* @__PURE__ */ React.createElement("p", { className: "sub" }, "El que falles, vuelve a salir hasta que te lo sepas"), SETS.map((s) => /* @__PURE__ */ React.createElement("button", { key: s.id, className: "choice", onClick: () => onStart(s.ids) }, /* @__PURE__ */ React.createElement("span", { className: "ic" }, /* @__PURE__ */ React.createElement(I, { n: "note", s: 18 })), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("span", { className: "serif", style: { display: "block", fontSize: 19, fontWeight: 600 } }, s.label), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, color: "var(--soft)" } }, s.sub)))), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  function Quiz({ ids, onFinish }) {
-    const setSize = ids.length;
-    const [sess, setSess] = useState(() => {
-      const q = shuffle(ids);
-      return { cur: makeQuestion(byCif(q[0])), queue: q.slice(1) };
-    });
-    const [selected, setSelected] = useState(null);
-    const [phase, setPhase] = useState("answer");
-    const [cleared, setCleared] = useState(() => /* @__PURE__ */ new Set());
-    const [wrong, setWrong] = useState({});
-    const [attempts, setAttempts] = useState(0);
-    const [lastOk, setLastOk] = useState(false);
-    const cur = sess.cur;
-    const serve = (q) => {
-      if (q.length === 0) {
-        onFinish({ setSize, wrong, attempts });
-        return;
-      }
-      const [next, ...rest] = q;
-      setSess({ cur: makeQuestion(byCif(next)), queue: rest });
-      setSelected(null);
-      setPhase("answer");
-    };
-    const choose = (opt) => {
-      if (phase !== "answer") return;
-      const ok = opt === cur.correct;
-      setSelected(opt);
-      setLastOk(ok);
-      setAttempts((a) => a + 1);
-      if (!ok) setWrong((w) => ({ ...w, [cur.chord.cif]: (w[cur.chord.cif] || 0) + 1 }));
-      setPhase("feedback");
-    };
-    const cont = () => {
-      let q = sess.queue;
-      if (lastOk) {
-        setCleared((p) => new Set(p).add(cur.chord.cif));
-      } else {
-        q = [...sess.queue];
-        q.splice(Math.min(3, q.length), 0, cur.chord.cif);
-      }
-      serve(q);
-    };
-    const pct = Math.round(cleared.size / setSize * 100);
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 18, marginTop: 4 } }, /* @__PURE__ */ React.createElement("div", { className: "track" }, /* @__PURE__ */ React.createElement("div", { className: "fill", style: { width: pct + "%" } })), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, color: "var(--soft)", minWidth: 42, textAlign: "right" } }, cleared.size, "/", setSize)), /* @__PURE__ */ React.createElement("div", { className: "card pop", key: cur.label + cur.big + attempts }, /* @__PURE__ */ React.createElement("div", { className: "prompt-l" }, cur.label), cur.big ? /* @__PURE__ */ React.createElement("div", { className: "big" }, cur.big) : /* @__PURE__ */ React.createElement("div", { style: { height: 6 } })), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 18 } }, cur.options.map((opt) => {
-      let cls = "opt";
-      if (phase === "feedback") {
-        if (opt === cur.correct) cls += " ok";
-        else if (opt === selected) cls += " no";
-        else cls += " dim";
-      }
-      return /* @__PURE__ */ React.createElement(
-        "button",
-        {
-          key: opt,
-          className: cls + (phase === "feedback" && opt === selected && !lastOk ? " shake" : ""),
-          disabled: phase === "feedback",
-          onClick: () => choose(opt)
-        },
-        opt
-      );
-    })), phase === "feedback" && /* @__PURE__ */ React.createElement("div", { className: "banner pop " + (lastOk ? "ok" : "no"), style: { marginTop: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 30, height: 30, borderRadius: 99, flex: "0 0 30px", background: lastOk ? "var(--green)" : "var(--red)", display: "flex", alignItems: "center", justifyContent: "center" } }, /* @__PURE__ */ React.createElement(I, { n: lastOk ? "check" : "x", s: 18, c: "#fff" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 700, fontSize: 18 } }, lastOk ? "\xA1Correcto!" : "Casi. Es " + cur.correct), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 15, color: "var(--soft)" } }, /* @__PURE__ */ React.createElement("b", null, cur.chord.cif), " = ", cur.chord.es))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 14, marginTop: 12 } }, /* @__PURE__ */ React.createElement("span", { className: "svgbox" }, /* @__PURE__ */ React.createElement(ChordDiagram, { chord: cur.chord, scale: 0.85 })), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14.5, lineHeight: 1.45 } }, explain(cur.chord))), /* @__PURE__ */ React.createElement("button", { className: "primary " + (lastOk ? "green" : ""), style: { marginTop: 14 }, onClick: cont }, "Continuar ", /* @__PURE__ */ React.createElement(I, { n: "right", s: 18 }))), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  const Stat = ({ big, label }) => /* @__PURE__ */ React.createElement("div", { className: "card", style: { flex: 1, textAlign: "center", padding: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontSize: 30, fontWeight: 700 } }, big), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13.5, color: "var(--soft)" } }, label));
-  function Results({ data, onRetryWrong, onAgain }) {
-    const { setSize, wrong, attempts } = data;
-    const wrongIds = Object.keys(wrong);
-    const perfect = setSize - wrongIds.length;
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", marginTop: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 60, height: 60, borderRadius: 99, background: "var(--ink)", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" } }, /* @__PURE__ */ React.createElement(I, { n: "award", s: 30, c: "#F5F0E5" })), /* @__PURE__ */ React.createElement("h1", { className: "h1", style: { fontSize: 28 } }, "\xA1Tanda completa!"), /* @__PURE__ */ React.createElement("p", { className: "sub", style: { marginBottom: 16 } }, "Has sacado los ", setSize, " acordes de la tanda.")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 12 } }, /* @__PURE__ */ React.createElement(Stat, { big: perfect + "/" + setSize, label: "a la primera" }), /* @__PURE__ */ React.createElement(Stat, { big: "" + attempts, label: "intentos en total" })), wrongIds.length > 0 ? /* @__PURE__ */ React.createElement("div", { className: "card", style: { marginTop: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontWeight: 700, fontSize: 18, marginBottom: 10 } }, "Para repasar"), wrongIds.sort((a, b) => wrong[b] - wrong[a]).map((id) => {
-      const c = byCif(id);
-      return /* @__PURE__ */ React.createElement("div", { key: id, style: { display: "flex", alignItems: "center", gap: 12, padding: "8px 0", borderBottom: "1px solid var(--rule)" } }, /* @__PURE__ */ React.createElement("span", { className: "serif", style: { fontWeight: 700, fontSize: 20, width: 54 } }, c.cif), /* @__PURE__ */ React.createElement("span", { style: { flex: 1 } }, c.es), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 13, color: "var(--soft)" } }, wrong[id], "\xD7 fallado"));
-    })) : /* @__PURE__ */ React.createElement("div", { className: "card", style: { marginTop: 16, textAlign: "center" } }, /* @__PURE__ */ React.createElement(I, { n: "spark", s: 22, c: "#2B8C54" }), /* @__PURE__ */ React.createElement("div", { className: "serif", style: { fontSize: 18, fontWeight: 700, marginTop: 4 } }, "Pleno, sin un solo fallo.")), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 18, display: "flex", flexDirection: "column", gap: 10 } }, wrongIds.length > 0 && /* @__PURE__ */ React.createElement("button", { className: "primary green", onClick: () => onRetryWrong(wrongIds) }, /* @__PURE__ */ React.createElement(I, { n: "redo", s: 18 }), " Repasar los ", wrongIds.length, " fallados"), /* @__PURE__ */ React.createElement("button", { className: "ghost", onClick: onAgain }, "Elegir otra tanda")), /* @__PURE__ */ React.createElement(Foot, null));
-  }
-  function Examen() {
-    const [phase, setPhase] = useState("setup");
-    const [ids, setIds] = useState(CHORDS.map((c) => c.cif));
-    const [result, setResult] = useState(null);
-    const start = (list) => {
-      setIds(list);
-      setPhase("quiz");
-    };
-    if (phase === "quiz") return /* @__PURE__ */ React.createElement(Quiz, { key: ids.join(","), ids, onFinish: (d) => {
-      setResult(d);
-      setPhase("results");
-    } });
-    if (phase === "results" && result) return /* @__PURE__ */ React.createElement(Results, { data: result, onRetryWrong: start, onAgain: () => setPhase("setup") });
-    return /* @__PURE__ */ React.createElement(Setup, { onStart: start });
-  }
-  const TABS = [
-    { k: "circulo", n: "wheel", label: "C\xEDrculo" },
-    { k: "acordes", n: "grid", label: "Acordes" },
-    { k: "aprende", n: "book", label: "Aprende" },
-    { k: "examen", n: "cap", label: "Examen" }
-  ];
-  function App() {
-    const [tab, setTab] = useState("circulo");
-    return /* @__PURE__ */ React.createElement("div", { className: "shell" }, /* @__PURE__ */ React.createElement("div", { className: "top" }, /* @__PURE__ */ React.createElement(IG, null), " ", /* @__PURE__ */ React.createElement("span", null, "@despedidoporlaia")), /* @__PURE__ */ React.createElement("div", { className: "content" }, tab === "circulo" && /* @__PURE__ */ React.createElement(Wheel, null), tab === "acordes" && /* @__PURE__ */ React.createElement(Acordes, null), tab === "aprende" && /* @__PURE__ */ React.createElement(Lessons, { goExam: () => setTab("examen") }), tab === "examen" && /* @__PURE__ */ React.createElement(Examen, null)), /* @__PURE__ */ React.createElement("div", { className: "nav" }, /* @__PURE__ */ React.createElement("div", { className: "nav-inner" }, TABS.map((t) => /* @__PURE__ */ React.createElement("button", { key: t.k, className: tab === t.k ? "on" : "", onClick: () => setTab(t.k) }, /* @__PURE__ */ React.createElement("span", { className: "navic" }, /* @__PURE__ */ React.createElement(I, { n: t.n, s: 20 })), t.label)))));
-  }
-  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(App, null));
-})();
+<header class="cabecera envoltorio">
+  <p class="marca">Diario de un despido</p>
+  <p class="tagline">Nuevas perspectivas en la era de la IA</p>
+</header>
 
-</script>
+<main class="envoltorio">
+  <article class="entrada">
+    <p class="fecha">10 agosto 2026</p>
+    <h1 class="titulo">Crear nuevos puntos de vista</h1>
+
+    <div class="cuerpo">
+      <p>Recuerdo esperando en una sala de embarque el regreso a Barcelona de mi viaje a Chile, hace unos años, donde algunas ideas anteriormente fijas se empezaban a desdibujar. Me di cuenta de que la experiencia es así de poderosa: trastoca perspectivas, remueve consciencias y habita nuevas versiones de ti mismo.</p>
+
+      <p class="destacado">Etimológicamente, perspectiva se refiere a «mirar a través».</p>
+
+      <p>Esta mirada, al atravesar una experiencia, una canción, una conversación, una persona y un sinfín de etcéteras, se reformula y se enriquece, en mi opinión. Estas son las experiencias que ponemos en valor y quizás las que deliberadamente buscamos vivir.</p>
+
+      <p>Creo que es una de las habilidades humanas que más disfruto, en mí y en otros. En algún momento del pasado, este cambio de forma de ver el mundo nos llevó a crear, a imaginar y a experimentar de nuevo. Creando un bucle precioso de casualidades.</p>
+    </div>
+
+    <p class="firma">— X.</p>
+  </article>
+
+  <p class="cierre">
+    Escribo aquí lo que no cabe en un reel.
+  </p>
+</main>
+
+<footer class="pie">· · ·</footer>
+
 </body>
 </html>
